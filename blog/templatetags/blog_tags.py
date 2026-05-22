@@ -4,14 +4,14 @@ from blog.models import Category
 register = template.Library()
 
 
-# ========== ПРОСТОЙ ТЕГ (SIMPLE TAG) ==========
+#  ПРОСТОЙ ТЕГ
 @register.simple_tag(name='get_categories')
 def get_categories():
     """Возвращает все категории"""
     return Category.objects.all()
 
 
-# ========== ТЕГ ВКЛЮЧЕНИЯ (INCLUSION TAG) ==========
+#  ТЕГ ВКЛЮЧЕНИЯ
 @register.inclusion_tag('blog/list_categories.html')
 def show_categories(arg=None):
     """
@@ -21,5 +21,5 @@ def show_categories(arg=None):
     categories = Category.objects.all()
     return {
         'categories': categories,
-        'arg': arg,  # передаём аргумент в шаблон (по желанию)
+        'arg': arg,  # передаём аргумент в шаблон
     }

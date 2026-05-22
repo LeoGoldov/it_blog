@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-
+from django.urls import reverse
 
 class Category(models.Model):
     """Модель для категорий"""
@@ -11,6 +11,10 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        """Возвращает URL на страницу категории"""
+        return reverse('category', kwargs={'category_slug': self.slug})
 
     class Meta:
         verbose_name = 'Категория'
@@ -30,7 +34,11 @@ class Post(models.Model):
         blank=True,
         verbose_name='Категория',
         related_name='posts'
+
     )
+
+    def get_absolute_url(self):
+        return reverse('post_detail', kwargs={'post_id': self.pk})
 
     def __str__(self):
         return self.title

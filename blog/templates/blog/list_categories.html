@@ -1,11 +1,8 @@
 <div class="list-group">
     <a href="{% url 'home' %}" class="list-group-item list-group-item-action">Все посты</a>
     {% for cat in categories %}
-        <a href="{% url 'category' cat.slug %}" class="list-group-item list-group-item-action">
+        <a href="{{ cat.get_absolute_url }}" class="list-group-item list-group-item-action">
             {{ cat.name }}
         </a>
     {% endfor %}
-    {% if arg %}
-        <div class="mt-2 text-muted small">Доп. параметр: {{ arg }}</div>
-    {% endif %}
 </div>
