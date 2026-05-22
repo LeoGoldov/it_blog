@@ -1,0 +1,25 @@
+# Виртуальное окружение
+venv/
+env/
+ENV/
+
+# Кэш Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# База данных
+db.sqlite3
+*.sqlite3
+
+# IDE (PyCharm)
+.idea/
+.vscode/
+
+# Django
+staticfiles/
+media/
+*.log
+
+# Миграции (опционально - если хочешь хранить миграции, закомментируй)
+# blog/migrations/__pycache__/

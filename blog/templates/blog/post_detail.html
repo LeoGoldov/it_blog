@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">{{ post.title }}</h1>
+            <div class="text-muted mb-3">
+                {% if post.category %}
+                    <span class="badge bg-primary">{{ post.category.name }}</span>
+                {% endif %}
+                {{ post.created_at|date:"Y-m-d H:i:s" }}
+            </div>
+            <p class="card-text">{{ post.content|linebreaks }}</p>
+            <a href="{% url 'home' %}" class="btn btn-secondary mt-3">← Назад</a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,5 @@
+Активация виртуального окужения:
+venv\scripts\activate
+
+Запуск сервера:
+python manage.py runserver

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+    <h1> Список новостей</h1>
+
+    {% for post in posts %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h2 class="card-title">
+                    <a href="{% url 'post_detail' post.id %}">{{ post.title }}</a>
+                </h2>
+                <div class="text-muted mb-2">
+                    {% if post.category %}
+                        <span class="badge bg-primary">{{ post.category.name }}</span>
+                    {% endif %}
+                    {{ post.created_at|date:"Y-m-d H:i:s" }}
+                </div>
+                <p class="card-text">{{ post.content|truncatewords:50 }}</p>
+                <a href="{% url 'post_detail' post.id %}" class="btn btn-outline-primary btn-sm">Читать далее →</a>
+            </div>
+        </div>
+    {% empty %}
+        <div class="alert alert-info">Пока нет постов. Зайдите в админку.</div>
+    {% endfor %}
+{% endblock %}
