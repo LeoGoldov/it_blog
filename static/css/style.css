@@ -1,60 +1,48 @@
 /* Основные стили для IT блога */
 body {
-    height: 100%;
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f8f9fa;
-     display: flex;
+    min-height: 100vh;
+    display: flex;
     flex-direction: column;
-    min-height: 100vh; /* 100% от высоты экрана */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+    /* Фоновая картинка */
+    background-image: url('/static/images/bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
 }
 
-/* Стили для карточек постов */
+/* Карточки постов — полупрозрачные, чтобы фон просвечивал */
 .card {
-    transition: transform 0.2s;
+    background-color: rgba(255, 255, 255, 0.92);
     border: none;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
 }
 
 .card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-/* Стили для заголовков */
-h1, h2, h3 {
-    color: #2c3e50;
+/* Стили для карточек в сайдбаре */
+.list-group-item {
+    background-color: rgba(255, 255, 255, 0.9);
 }
 
-/* Стили для ссылок */
-a {
-    text-decoration: none;
-    color: #3498db;
+/* Кнопки */
+.btn-primary {
+    background: #667eea;
+    border: none;
 }
 
-a:hover {
-    color: #2980b9;
-    text-decoration: underline;
+.btn-primary:hover {
+    background: #5a67d8;
 }
 
-/* Стили для блока категорий */
-.list-group-item.active {
-    background-color: #3498db;
-    border-color: #3498db;
-}
-
-/* Стили для footer */
+/* Футер всегда внизу */
 footer {
-    margin-top: 50px;
-    padding: 20px 0;
-    background-color: #2c3e50;
-    color: white;
-}
-
-/* Адаптивность для мобильных устройств */
-@media (max-width: 768px) {
-    .container {
-        padding: 0 15px;
-    }
+    margin-top: auto;
 }
