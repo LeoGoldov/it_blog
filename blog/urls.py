@@ -1,9 +1,17 @@
 from django.urls import path
 from . import views
+from .views import (
+    HomeListView,
+    PostsByCategoryListView,
+    PostDetailView,
+    CreatePostView,
+    CategoryDetailView  # для индивидуального задания
+)
 
 urlpatterns = [
-    path('', views.post_list, name='home'),
-    path('post/<int:post_id>/', views.post_detail, name='post_detail'),
-    path('category/<slug:category_slug>/', views.posts_by_category, name='category'),
-    path('add/', views.add_post, name='add_post'),
+    path('', HomeListView.as_view(), name='home'),
+    path('post/<int:post_id>/', PostDetailView.as_view(), name='post_detail'),
+    path('category/<slug:category_slug>/', PostsByCategoryListView.as_view(), name='category'),
+    path('add/', CreatePostView.as_view(), name='add_post'),
+    path('category/detail/<slug:category_slug>/', CategoryDetailView.as_view(), name='category_detail'),
 ]

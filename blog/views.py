@@ -1,52 +1,79 @@
-from django.shortcuts import render, get_object_or_404
+from django.views.generic import ListView, DetailView, CreateView
+from django.urls import reverse_lazy
 from .models import Post, Category
-from .forms import NewsForm, PostModelForm
-def post_list(request):
-    """Главная страница со списком всех постов"""
-    posts = Post.objects.all()
-    return render(request, 'blog/post_list.html', {
-        'posts': posts,
-        'title': 'Главная'
-    })
-
-def post_detail(request, post_id):
-    """Страница отдельного поста"""
-    post = get_object_or_404(Post, id=post_id)
-    return render(request, 'blog/post_detail.html', {
-        'post': post,
-        'title': post.title
-    })
-
-def posts_by_category(request, category_slug):
-    """Страница с постами определённой категории"""
-    category = get_object_or_404(Category, slug=category_slug)
-    posts = Post.objects.filter(category=category)
-    return render(request, 'blog/category.html', {
-        'posts': posts,
-        'category': category,
-        'title': category.name
-    })
+from .forms import PostModelForm  # или NewsForm, если используешь несвязанную
 
 
-from .forms import NewsForm, PostModelForm
+# ========== ListView для главной страницы ==========
+class HomeListView(ListView):
+    model = Post
+    template_name = 'blog/post_list.html'
+    context_object_name = 'posts'
+    extra_context = {'title': 'Главная страница'}
 
-from django.shortcuts import render, redirect
-from .forms import NewsForm
-from .models import Post
+    def get_queryset(self):
+        """Показываем только опубликованные посты"""
+        return Post.objects.all()  # .filter(is_published=True) если есть такое поле
 
 
-def add_post(request):
-    if request.method == 'POST':
-        form = NewsForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            post = Post.objects.create(  # ← сохраняем post в переменную
-                title=cd['title'],
-                content=cd['content'],
-                category=cd['category']
-            )
-            return redirect('post_detail', post_id=post.id)  # ← редирект на созданный пост
-    else:
-        form = NewsForm()
+# ========== ListView для категорий (заменяет posts_by_category) ==========
+class PostsByCategoryListView(ListView):
+    model = Post
+    template_name = 'blog/category.html'
+    context_object_name = 'posts'
 
-    return render(request, 'blog/add_post.html', {'form': form})
+    def get_queryset(self):
+        """Фильтруем посты по slug категории"""
+        self.category = Category.objects.get(slug=self.kwargs['category_slug'])
+        return Post.objects.filter(category=self.category)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = self.category
+        context['title'] = self.category.name
+        return context
+
+
+# ========== DetailView для отдельного поста ==========
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'blog/post_detail.html'
+    context_object_name = 'post'
+    pk_url_kwarg = 'post_id'  # чтобы работал post_id вместо pk
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = self.object.title
+        return context
+
+
+# ========== CreateView для добавления поста ==========
+class CreatePostView(CreateView):
+    form_class = PostModelForm  # или NewsForm
+    template_name = 'blog/add_post.html'
+    success_url = reverse_lazy('home')  # временно, потом переопределим
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Добавление поста'
+        return context
+
+    def form_valid(self, form):
+        """После сохранения редиректим на страницу созданного поста"""
+        self.object = form.save()
+        return redirect('post_detail', post_id=self.object.id)
+
+
+# ========== ИНДИВИДУАЛЬНОЕ ЗАДАНИЕ (ВАРИАНТ 3) ==========
+# DetailView для модели Category
+class CategoryDetailView(DetailView):
+    model = Category
+    template_name = 'blog/category_detail.html'
+    context_object_name = 'category'
+    slug_url_kwarg = 'category_slug'  # используем slug вместо pk
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'Категория: {self.object.name}'
+        context['posts'] = Post.objects.filter(category=self.object)
+        return context

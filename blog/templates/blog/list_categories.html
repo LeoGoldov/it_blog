@@ -1,8 +1,8 @@
-<div class="list-group">
-    <a href="{% url 'home' %}" class="list-group-item list-group-item-action">Все посты</a>
-    {% for cat in categories %}
-        <a href="{{ cat.get_absolute_url }}" class="list-group-item list-group-item-action">
-            {{ cat.name }}
-        </a>
-    {% endfor %}
-</div>
+
+{% for cat in categories %}
+    <a href="{{ cat.get_absolute_url }}" class="list-group-item list-group-item-action">
+        {{ cat.name }}
+    </a>
+    <!-- Дополнительная ссылка для варианта 3 -->
+    <a href="{% url 'category_detail' cat.slug %}" class="small ms-2">(подробнее о категории)</a>
+{% endfor %}

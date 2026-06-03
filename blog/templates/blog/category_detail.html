@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">{{ category.name }}</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>Slug:</strong> {{ category.slug }}</p>
+            <p><strong>Дата создания:</strong> {{ category.created_at|date:"d.m.Y H:i" }}</p>
+            {% if category.description %}
+                <p><strong>Описание:</strong> {{ category.description }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <h3>📝 Новости в этой категории:</h3>
+
+    {% for post in posts %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h4><a href="{% url 'post_detail' post.id %}">{{ post.title }}</a></h4>
+                <div class="text-muted">{{ post.created_at|date:"d.m.Y H:i" }}</div>
+                <p>{{ post.content|truncatewords:30 }}</p>
+                <a href="{% url 'post_detail' post.id %}" class="btn btn-sm btn-outline-primary">Читать далее →</a>
+            </div>
+        </div>
+    {% empty %}
+        <div class="alert alert-warning">В этой категории пока нет постов.</div>
+    {% endfor %}
+
+    <a href="{% url 'home' %}" class="btn btn-secondary mt-3">← На главную</a>
+{% endblock %}
