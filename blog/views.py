@@ -1,8 +1,8 @@
 from django.views.generic import ListView, DetailView, CreateView
 from django.urls import reverse_lazy
 from .models import Post, Category
-from .forms import PostModelForm  # или NewsForm, если используешь несвязанную
-
+from .forms import PostModelForm
+from django.shortcuts import redirect
 
 # ========== ListView для главной страницы ==========
 class HomeListView(ListView):
@@ -16,7 +16,11 @@ class HomeListView(ListView):
         return Post.objects.all()  # .filter(is_published=True) если есть такое поле
 
 
-# ========== ListView для категорий (заменяет posts_by_category) ==========
+#def posts_by_category(request, category_slug):
+   # category = get_object_or_404(Category, slug=category_slug)
+    #posts = Post.objects.filter(category=category)
+    #return render(request, 'blog/category.html', {'posts': posts, 'category': category})
+#Класс для категорий
 class PostsByCategoryListView(ListView):
     model = Post
     template_name = 'blog/category.html'
@@ -47,7 +51,7 @@ class PostDetailView(DetailView):
         return context
 
 
-# ========== CreateView для добавления поста ==========
+# CreateView для добавления поста ==========
 class CreatePostView(CreateView):
     form_class = PostModelForm  # или NewsForm
     template_name = 'blog/add_post.html'
@@ -64,7 +68,7 @@ class CreatePostView(CreateView):
         return redirect('post_detail', post_id=self.object.id)
 
 
-# ========== ИНДИВИДУАЛЬНОЕ ЗАДАНИЕ (ВАРИАНТ 3) ==========
+#  ИНД задание
 # DetailView для модели Category
 class CategoryDetailView(DetailView):
     model = Category

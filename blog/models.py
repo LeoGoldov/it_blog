@@ -29,13 +29,16 @@ class Post(models.Model):
     updated_at = models.DateTimeField('Дата обновления', auto_now=True)
     category = models.ForeignKey(
         Category,
-        on_delete=models.SET_NULL,  # если категорию удалим, у поста будет null
+        on_delete=models.SET_NULL,
         null=True,
         blank=True,
         verbose_name='Категория',
         related_name='posts'
 
     )
+
+    views = models.IntegerField('Просмотры', default=0)  # ← добавить
+    is_published = models.BooleanField('Опубликовано', default=True)  # ← добавить
 
     def get_absolute_url(self):
         return reverse('post_detail', kwargs={'post_id': self.pk})
