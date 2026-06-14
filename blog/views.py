@@ -9,11 +9,10 @@ class HomeListView(ListView):
     model = Post
     template_name = 'blog/post_list.html'
     context_object_name = 'posts'
-    extra_context = {'title': 'Главная страница'}
+    paginate_by = 10
 
     def get_queryset(self):
-        """Показываем только опубликованные посты"""
-        return Post.objects.all()  # .filter(is_published=True) если есть такое поле
+        return Post.objects.all().select_related('category')  # .filter(is_published=True) если есть такое поле
 
 
 #def posts_by_category(request, category_slug):
