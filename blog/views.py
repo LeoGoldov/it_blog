@@ -2,8 +2,21 @@ from django.views.generic import ListView, DetailView, CreateView
 from django.urls import reverse_lazy
 from .models import Post, Category
 from .forms import PostModelForm
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
+from django.contrib import messages
+from .forms import UserRegisterForm
 
+def register(request):
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Аккаунт {username} создан!')
+            return redirect('home')
+    else:
+        form = UserRegisterForm()
+    return render(request, 'blog/register.html', {'form': form, 'title': 'Регистрация'})
 # ========== ListView для главной страницы ==========
 class HomeListView(ListView):
     model = Post

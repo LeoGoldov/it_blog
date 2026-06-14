@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog',
     'debug_toolbar',
+    'ckeditor',
+    'ckeditor_uploader',
+    'captcha',
 ]
 
 MIDDLEWARE = [
@@ -85,6 +88,21 @@ DATABASES = {
     }
 }
 
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 300,
+        'width': '100%',
+        'toolbar_Custom': [
+            ['Format', 'Table', 'Image', 'Media'],
+            ['Bold', 'Italic', 'Underline'],
+            ['NumberedList', 'BulletedList'],
+            ['Link', 'Unlink'],
+            ['RemoveFormat', 'Source']
+        ],
+        'toolbar': 'Custom',
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -129,3 +147,12 @@ STATICFILES_DIRS = [
 # Для production (пока не нужно, но на будущее)
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 INTERNAL_IPS = ["127.0.0.1"]
+CKEDITOR_UPLOAD_PATH = "uploads/"
+
+# Настройки кэширования
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_DIR, 'django_cache'),
+    }
+}

@@ -9,8 +9,21 @@ def validate_title_not_start_with_digit(value):
     if value and value[0].isdigit():
         raise ValidationError('Заголовок не может начинаться с цифры!')
 
-from django import forms
+
 from .models import Category
+
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from captcha.fields import CaptchaField
+
+
+class UserRegisterForm(UserCreationForm):
+    email = forms.EmailField(label='Email')
+    captcha = CaptchaField(label='Капча')
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
 
 class NewsForm(forms.Form):
     title = forms.CharField(

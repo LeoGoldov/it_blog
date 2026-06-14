@@ -12,7 +12,10 @@
                 {% endif %}
                 {{ post.created_at|date:"Y-m-d H:i:s" }}
             </div>
-            <p class="card-text">{{ post.content|linebreaks }}</p>
+            <div class="card-text">
+                <!-- ВАЖНО: вот это должно быть -->
+                {{ post.content|safe }}
+            </div>
             <a href="{% url 'home' %}" class="btn btn-secondary mt-3">← Назад</a>
         </div>
     </div>
